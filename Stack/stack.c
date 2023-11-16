@@ -2,23 +2,22 @@
 #include <stdlib.h>
 
 
-struct Node {
+struct Stack_Node {
     int val;
     struct Node * next;
 };
 
-struct Queue {
-    int number_ele;
+struct Stack {
     int Ele_in_queue;
     struct Node * head;
     struct Node * tail;
 };
 
 
-struct Queue * initQueue(int n)
+struct Stack * init_Stack(int n)
 {
 
-    struct Queue * q = (struct Queue *) malloc( sizeof( struct Queue ) );
+    struct Stack * q = (struct Stack *) malloc( sizeof( struct Static));
 
     if (q == NULL) {
         printf("cant aquire memory");
@@ -26,34 +25,25 @@ struct Queue * initQueue(int n)
     }
 
     q-> Ele_in_queue = 0;
-    q->number_ele = n;
     q->head = NULL;
     q->tail = NULL;
 
     return q;
 }
 
-int isNull(struct Queue * q)
+int isNull(struct Stack * q)
 {
     return q->head == NULL;
 }
 
-int isFull(struct Queue *q)
+
+
+
+void Push(struct Stack *q,int n)
 {
-    return q->number_ele == q-> Ele_in_queue;
-}
+    
 
-
-void Enqueue(struct Queue *q,int n)
-{
-    if (isFull(q)) {
-
-    printf("Queue Full");
-
-    return;
-    }
-
-    struct Node * cn = (struct Node *) malloc (sizeof(struct Node));
+    struct  Stack_Node * cn = (struct  Stack_Node *) malloc (sizeof(struct  Stack_Node));
 
     if (cn == NULL) {
         printf("cant aquire memory");
@@ -74,16 +64,17 @@ void Enqueue(struct Queue *q,int n)
 }
 
 
-int Dequeue(struct Queue *q)
+int Pop(struct Stack *q)
 {
     int tmpVal;
 
     if (isNull(q)) {
-        printf("Queue Empty");
+        printf("Stack Empty");
         return -1;
     }
 
-    struct Node * tmp = q->head;
+
+    struct  Stack_Node * tmp = q->tail;
     q -> head = q->head->next;
     q -> Ele_in_queue--;
 
@@ -101,7 +92,7 @@ int Peek(struct Queue * q)
         return -1;
     }
 
-    return q->head->val;
+    return q->tail->val;
 }
 
 void print_Queue(struct Queue * q)
@@ -116,25 +107,8 @@ void print_Queue(struct Queue * q)
 
         printf("%d ",head->val);
         head = head->next;
-    
     }
 
     printf("\n");
 }
-
-
-// int main(){
-// struct Queue * q = initQueue(5);
-
-// Enqueue(q,4);
-// Enqueue(q,2);
-// Enqueue(q,1);
-// print_Queue(q);
-// printf("%d \n", Dequeue(q));
-// printf("%d \n", Dequeue(q));
-// printf("%d \n", Dequeue(q));
-//   Dequeue(q);
-
-// return 1;
-// }
 
