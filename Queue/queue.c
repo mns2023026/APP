@@ -1,31 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
-
-struct Node {
+struct queue_node {
     int val;
-    struct Node * next;
+    struct queue_node *next;
 };
 
-struct Queue {
+struct queue {
     int number_ele;
-    int Ele_in_queue;
-    struct Node * head;
-    struct Node * tail;
+    int ele_in_queue;
+    struct queue_node *head;
+    struct queue_node *tail;
 };
 
-
-struct Queue * initQueue(int n)
-{
-
-    struct Queue * q = (struct Queue *) malloc( sizeof( struct Queue ) );
+struct queue *init_queue(int n) {
+    struct queue *q = (struct queue *)malloc(sizeof(struct queue));
 
     if (q == NULL) {
-        printf("cant aquire memory");
+        perror("Can't acquire memory");
         exit(1);
     }
 
-    q-> Ele_in_queue = 0;
+    q->ele_in_queue = 0;
     q->number_ele = n;
     q->head = NULL;
     q->tail = NULL;
@@ -33,90 +30,77 @@ struct Queue * initQueue(int n)
     return q;
 }
 
-int isNull(struct Queue * q)
-{
+int is_null(struct queue *q) {
     return q->head == NULL;
 }
 
-int isFull(struct Queue *q)
-{
-    return q->number_ele == q-> Ele_in_queue;
+int is_full(struct queue *q) {
+    return q->number_ele == q->ele_in_queue;
 }
 
-
-void Enqueue(struct Queue *q,int n)
-{
-    if (isFull(q)) {
-
-    printf("Queue Full");
-
-    return;
+void enqueue(struct queue *q, int n) {
+    if (is_full(q)) {
+        perror("Queue Full\n");
+        return;
     }
 
-    struct Node * cn = (struct Node *) malloc (sizeof(struct Node));
+    struct queue_node *cn = (struct queue_node *)malloc(sizeof(struct queue_node));
 
     if (cn == NULL) {
-        printf("cant aquire memory");
+        perror("Can't acquire memory\n");
         return;
     }
 
     cn->val = n;
-    q-> Ele_in_queue++;
+    q->ele_in_queue++;
 
     if (q->head == NULL) {
         q->head = cn;
         q->tail = cn;
-        return ;
+        return;
     }
 
     q->tail->next = cn;
     q->tail = cn;
 }
 
+int dequeue(struct queue *q) {
+    int tmp_val;
 
-int Dequeue(struct Queue *q)
-{
-    int tmpVal;
-
-    if (isNull(q)) {
-        printf("Queue Empty");
+    if (is_null(q)) {
+        perror("Queue Empty\n");
         return -1;
     }
 
-    struct Node * tmp = q->head;
-    q -> head = q->head->next;
-    q -> Ele_in_queue--;
+    struct queue_node *tmp = q->head;
+    q->head = q->head->next;
+    q->ele_in_queue--;
 
-    tmpVal = tmp->val;
+    tmp_val = tmp->val;
     free(tmp);
 
-    return tmpVal;
+    return tmp_val;
 }
 
-
-int Peek(struct Queue * q)
-{
-    if (isNull(q)) {
-        printf("Queue Empty");
+int peek(struct queue *q) {
+    if (is_null(q)) {
+        perror("Queue Empty\n");
         return -1;
     }
 
     return q->head->val;
 }
 
-void print_Queue(struct Queue * q)
-{
-    if (isNull(q)) {
-        return ;
+void print_queue(struct queue *q) {
+    if (is_null(q)) {
+        return;
     }
 
-    struct Node * head = q->head;
+    struct queue_node *head = q->head;
 
     while (head) {
-
-        printf("%d ",head->val);
+        printf("%d ", head->val);
         head = head->next;
-    
     }
 
     printf("\n");

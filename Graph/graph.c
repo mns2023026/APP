@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 struct Graph_Node{
 	int val;
@@ -15,6 +16,10 @@ struct Graph_list{
 struct Graph_list * init_graph(int n)
 {
 	struct Graph_list * gl = (struct Graph_list *) malloc (sizeof(struct Graph_list));
+	if (gl == NULL) {
+        perror("Can't acquire memory");
+        exit(1);
+    }
 	gl -> number_of_nodes = n;
 	gl -> List = (struct Graph_Node **) malloc (n * sizeof(struct Graph_Node*));
 
